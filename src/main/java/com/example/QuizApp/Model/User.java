@@ -13,8 +13,6 @@ public class User {
     private String email;
     private String username;
     private String password;
-    private int coins;
-
     public User() {
     }
 
@@ -50,11 +48,4 @@ public class User {
         this.password = password;
     }
 
-    public int getCoins() {
-        return coins;
-    }
-
-    public void setCoins(int coins) {
-        this.coins = coins;
-    }
 }
