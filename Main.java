@@ -1,4 +1,7 @@
+
+import java.sql.*;
 import java.util.Scanner;
+import java.sql.Connection;
 
 public class Main {
     public static void main(String[] args) {
@@ -16,12 +19,39 @@ public class Main {
             System.out.println("Enter your username: ");
          String username = sc.nextLine();
             System.out.println("Enter your password: ");
-         String password = sc.nextLine();
+         String pass = sc.nextLine();
             try {
-                User current_user = new User(email, username, password);
+                User current_user = new User(email, username, pass);
+
+                 //sql insert&connection
+                   try {
+                    String url ="jdbc:mysql://localhost:3306/Quiz";
+                    String user = "root";
+                    String password = "root";
+                    Connection con = DriverManager.getConnection(url,user,password);
+
+                    Statement stm = con.createStatement();
+                    String INSERT = "INSERT INTO USER(email, username, password)"
+                            + " values (?, ?, ?)";
+                    PreparedStatement pr = con.prepareStatement(INSERT);
+                    pr.setString(1,email);
+                    pr.setString(2,username);
+                    pr.setString(3,pass);
+
+                    int count = pr.executeUpdate();
+                    if(count==0){
+                        System.out.println("Record not submitted");
+                    }else{
+                        System.out.println("Record stored!");
+                    }
+
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
             } catch (CredentialsException e) {
                 System.out.println(e.getMessage());
             }
+
 
         }
         else if(play.equals("Login")){
