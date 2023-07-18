@@ -55,14 +55,41 @@ public class Main {
 
         }
         else if(play.equals("Login")){
+            System.out.println("Enter your username: ");
+            String username = sc.nextLine();
+            System.out.println("Enter your password: ");
+            String pass = sc.nextLine();
+            boolean hasRegisteredUsers = false;
+            String url ="jdbc:mysql://localhost:3306/Quiz";
+            String user = "root";
+            String password = "root";
+            try {
+                Connection conn = DriverManager.getConnection(url,user,password);
+                String login =  "SELECT * FROM user WHERE username=? AND password=?";
+                PreparedStatement rp = conn.prepareStatement(login);
+                rp.setString(1,username);
+                rp.setString(2, pass);
+                ResultSet result = rp.executeQuery();
+                if (result.next()) {
+                    int numUsers = result.getInt(1);
+                    if(numUsers > 0){
+                        hasRegisteredUsers = true;
+                        System.out.println("Logged succesfully!");
+                    }else{
+                        System.out.println("Wrong username or password!");
+                    }
+                }
+            } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
 
         }
         else if(play.equals("PlayAsAGuest")){
+            System.out.println("Logged succesfully!");
 
         }
 
         //choose sphere for the quiz
-        //need mySql with database of the questions so we could randomize them
 
 
 
