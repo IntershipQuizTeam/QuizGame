@@ -43,6 +43,8 @@ public class Main {
                         System.out.println("Record not submitted");
                     }else{
                         System.out.println("Record stored!");
+                        stm.close();
+                        con.close();
                     }
 
                 } catch (SQLException e) {
@@ -75,6 +77,8 @@ public class Main {
                     if(numUsers > 0){
                         hasRegisteredUsers = true;
                         System.out.println("Logged succesfully!");
+                        rp.close();
+                        conn.close();
                     }else{
                         System.out.println("Wrong username or password!");
                     }
@@ -89,9 +93,14 @@ public class Main {
 
         }
 
-        //choose sphere for the quiz
 
-
+    }
+    //choose sphere for the quiz
+    private static void readyToPlay(){
+        System.out.println("CHOOSE WHAT YOU'RE BEST AT!: [MATH][GEOGRAPHY][HISTORY][LITERATURE]");
+        Scanner scanner = new Scanner(System.in);
+        String Sphere = scanner.nextLine();
+        if(Sphere.equals());
 
     }
 
