@@ -18,6 +18,15 @@ CREATE TABLE math (
   correct_answer VARCHAR(100)
 );
 
+CREATE TABLE scores (
+id INT PRIMARY KEY AUTO_INCREMENT,
+user_id INT,
+score INT,
+date DATE,
+CONSTRAINT FOREIGN KEY (user_id) REFERENCES User(id)
+);
+
+
 INSERT INTO math(question_text, question_type, option1, option2, option3, option4, correct_answer)
 VALUES('Which of the following is a prime number?','multiple-choice' , '4', '9', '11', '15', '11');
  
@@ -296,6 +305,10 @@ VALUE ('Which famous Bulgarian mountain is known for its stunning Seven Rila Lak
 
 
 
+select * from scores;
+
+
+select * from user;
 
 
 
