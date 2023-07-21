@@ -5,7 +5,7 @@ public class User {
     private String username;
     private String password;
 
-    private final static Pattern emailPattern = Pattern.compile("[A-Za-z0-9_.]+@gmail.com");
+    private final static Pattern emailPattern = Pattern.compile("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
 
     private final static Pattern usernamePattern = Pattern.compile("^[a-zA-Z0-9_]{3,10}$");
 
@@ -54,17 +54,7 @@ public class User {
         this.password = password;
     }
 
-    //not ready still writing smth here
-    public static void login(String username, String password) throws CredentialsException {
-        if (!usernamePattern.matcher(username).matches()) {
-            throw new CredentialsException("Error: Invalid EGN format.");
-        }
-        if (!passwordPattern.matcher(password).matches()) {
-            throw new CredentialsException("Error: Invalid password");
-
-        }
-
 
     }
-}
+
 
