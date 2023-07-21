@@ -6,11 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/quiz")
-@CrossOrigin
+@CrossOrigin("localhost:")
 public class QuizController {
     @Autowired
     private QuizRepository quizRepository;
@@ -27,7 +26,7 @@ public class QuizController {
     }
 
     @GetMapping("/allbytype/{typeid}")
-    Optional<Quiz> getAllByTypeId(@PathVariable int typeid) {
+    List<Quiz> getAllByTypeId(@PathVariable int typeid) {
         return quizRepository.findAllByTypeid(typeid);
     }
 }
