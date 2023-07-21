@@ -7,7 +7,7 @@ import java.util.*;
 import java.sql.Connection;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
 
         //login system
         Scanner sc = new Scanner(System.in);
@@ -57,7 +57,6 @@ public class Main {
                 System.out.println(e.getMessage());
             }
 
-
         }
         else if(play.equals("Login")){
             System.out.println("Enter your account information to log in!");
@@ -69,6 +68,9 @@ public class Main {
             System.out.println("You're playing as a guest!");
            readyToPlay("1");
 
+        }
+        else if (play.equals("See leaderboard here!")){
+            leaderBoard();
         }
 
 
@@ -200,9 +202,71 @@ public class Main {
             throw new RuntimeException(e);
         }
     }
+/*
+    private static void leaderBoard() throws SQLException {
+        try {
+            String url = "jdbc:mysql://localhost:3306/Quiz";
+            String user = "root";
+            String password = "root";
+            Connection con = DriverManager.getConnection(url, user, password);
+            String view = "SELECT score=? AND username=? FROM scores JOIN user";
+            PreparedStatement pr = con.prepareStatement(view);
+            ResultSet vieww = pr.executeQuery();
+            List <Integer> leaderBoard = new ArrayList<Integer>();
+            Map<String, Map<String, Integer>> leaderScores = new HashMap<>();
+            while (vieww.next()) {
+                String username = vieww.getString("username");
+                int scores = vieww.getInt("scores");
 
+                Map<String, Integer> saved = new HashMap<>();
+                saved.put("scored", vieww.getInt("score"));
+                leaderScores.put(username, saved);
+            } List<Entry<Character, Integer>> top3 = leaderScores.entrySet().stream()
+                    .sorted(comparing(Entry::getValue, reverseOrder()))
+                    .limit(3)
+                    .collect(toList());
 
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+
+    }*/
+    private static void leaderBoard() throws SQLException {
+        try {
+            String url = "jdbc:mysql://localhost:3306/Quiz";
+            String user = "root";
+            String password = "root";
+            Connection con = DriverManager.getConnection(url, user, password);
+            String view = "SELECT score, username FROM scores JOIN user ON scores.user_id = user.id ORDER BY score DESC LIMIT 3";
+            PreparedStatement pr = con.prepareStatement(view);
+            ResultSet vieww = pr.executeQuery();
+
+            Map<String, Integer> leaderScores = new LinkedHashMap<>();
+            while (vieww.next()) {
+                String username = vieww.getString("username");
+                int score = vieww.getInt("score");
+                leaderScores.put(username, score);
+            }
+
+            // Displaying the leaderboard
+            System.out.println("Leaderboard - Top 3 Scores:");
+            int rank = 1;
+            for (Map.Entry<String, Integer> entry : leaderScores.entrySet()) {
+                System.out.println(rank + ". " + entry.getKey() + ": " + entry.getValue());
+                rank++;
+            }
+
+            // Close the resources
+            vieww.close();
+            pr.close();
+            con.close();
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 }
+
+
 
 
 
