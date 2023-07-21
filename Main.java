@@ -1,5 +1,7 @@
-
-import java.net.SocketTimeoutException;
+import static java.util.Comparator.comparing;
+import static java.util.Comparator.reverseOrder;
+import static java.util.stream.Collectors.toList;
+import java.util.Map.Entry;
 import java.sql.*;
 import java.util.*;
 import java.sql.Connection;
@@ -44,8 +46,7 @@ public class Main {
                         System.out.println("Record not submitted");
                     }else{
                         System.out.println("Record stored!");
-                        //tuk trqbva da se podade user_id na insertnatiq potrebitel ili da se nasochi kum login
-                        readyToPlay("1");
+                        Login();
                         con.close();
                     }
 
@@ -59,37 +60,9 @@ public class Main {
 
         }
         else if(play.equals("Login")){
-            System.out.println("Enter your username: ");
-            String username = sc.nextLine();
-            System.out.println("Enter your password: ");
-            String pass = sc.nextLine();
-            boolean hasRegisteredUsers = false;
-            String url ="jdbc:mysql://localhost:3306/Quiz";
-            String user = "root";
-            String password = "root";
-            try {
-                Connection conn = DriverManager.getConnection(url,user,password);
-                String login =  "SELECT * FROM user WHERE username=? AND password=?";
-                PreparedStatement rp = conn.prepareStatement(login);
-                rp.setString(1,username);
-                rp.setString(2, pass);
+            System.out.println("Enter your account information to log in!");
+            Login();
 
-                ResultSet result = rp.executeQuery();
-                if (result.next()) {
-                    int numUsers = result.getInt(1);
-                    if(numUsers > 0){
-                        hasRegisteredUsers = true;
-                        String current_user_id = result.getString("id");
-                        System.out.println("Logged succesfully!");
-                        rp.close();
-                        readyToPlay(current_user_id);
-                    }else{
-                        System.out.println("Wrong username or password!");
-                    }
-                }
-            } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
 
         }
         else if(play.equals("PlayAsAGuest") || play.equals("p")){
@@ -193,7 +166,43 @@ public class Main {
         return countScore;
     }
 
+    public static void Login() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter your username: ");
+        String username = sc.nextLine();
+        System.out.println("Enter your password: ");
+        String pass = sc.nextLine();
+        boolean hasRegisteredUsers = false;
+        String url = "jdbc:mysql://localhost:3306/Quiz";
+        String user = "root";
+        String password = "root";
+        try {
+            Connection conn = DriverManager.getConnection(url, user, password);
+            String login = "SELECT * FROM user WHERE username=? AND password=?";
+            PreparedStatement rp = conn.prepareStatement(login);
+            rp.setString(1, username);
+            rp.setString(2, pass);
+
+            ResultSet result = rp.executeQuery();
+            if (result.next()) {
+                int numUsers = result.getInt(1);
+                if (numUsers > 0) {
+                    hasRegisteredUsers = true;
+                    String current_user_id = result.getString("id");
+                    System.out.println("Logged succesfully!");
+                    rp.close();
+                    readyToPlay(current_user_id);
+                } else {
+                    System.out.println("Wrong username or password!");
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
+    }
+
+
+}
 
 
 
